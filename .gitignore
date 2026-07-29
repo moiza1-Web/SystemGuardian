@@ -1,0 +1,20 @@
+# SystemGuardian Git Ignore File
+
+# Generated Output files and reports
+Output/
+
+# Log files
+Logs/
+*.log
+
+# IDE and Editor settings
+.vscode/
+.idea/
+
+# Temporary and OS files
+*.tmp
+Thumbs.db
+Desktop.ini
+
+
+*.pdf

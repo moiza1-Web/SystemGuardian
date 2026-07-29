@@ -1,0 +1,45 @@
+{
+  "version": "1.0.0",
+
+  "scanOptions": {
+    "includeSystemDrives": true,
+    "includeUserProfile": true,
+    "includeProgramFiles": true,
+    "maxDepth": 5
+  },
+
+  "StorageAnalysis": {
+    "StorageHeavyFileMB": 500,
+    "HugeFileMB": 2048,
+    "LargeFolderMB": 1024,
+    "HugeFolderMB": 20480,
+    "OldFileDays": 365,
+    "OldFileMinSizeMB": 100,
+    "ArchiveMinSizeMB": 500,
+    "IsoMinSizeMB": 1024,
+    "BrowserCacheAlertMB": 500,
+    "TempFileMinSizeMB": 50
+  },
+
+  "DuplicateAnalysis": {
+    "DuplicateMinFileMB": 1
+  },
+
+  "ExcludeFolders": [
+    "C:\\Windows",
+    "C:\\ProgramData\\Microsoft\\Windows\\WinSxS",
+    "C:\\System Volume Information"
+  ],
+
+  "output": {
+    "csvFolder": "Output\\CSV",
+    "reportFolder": "Output\\Reports",
+    "htmlFolder": "Output\\HTML"
+  },
+
+  "logging": {
+    "enabled": true,
+    "logFile": "Logs\\toolkit.log",
+    "level": "Info"
+  }
+}
