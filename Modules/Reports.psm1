@@ -4,6 +4,7 @@
 
 Import-Module (Join-Path $PSScriptRoot "Logger.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "Progress.psm1") -Force
+Import-Module (Join-Path $PSScriptRoot "Utils.psm1") -Force
 
 function Invoke-Reports {
     <#
@@ -15,18 +16,21 @@ function Invoke-Reports {
     #>
 
     # ----- Path Setup -----
+    # Compute ProjectRoot/OutputCSV first (without creating anything) so we
+    # can preserve the original behavior: bail out with a warning if the CSV
+    # output from earlier modules doesn't exist yet, rather than silently
+    # creating an empty folder and proceeding.
     $script:ModuleDir = $PSScriptRoot
     $script:ProjectRoot = Split-Path -Parent $script:ModuleDir
     $script:OutputCSV = Join-Path $script:ProjectRoot "Output\CSV"
-    $script:OutputReports = Join-Path $script:ProjectRoot "Output\Reports"
 
     if (-not (Test-Path $script:OutputCSV)) {
         Write-Warning "No CSV data found. Run Storage and other modules first."
         return $false
     }
-    if (-not (Test-Path $script:OutputReports)) {
-        New-Item -Path $script:OutputReports -ItemType Directory -Force | Out-Null
-    }
+
+    $paths = Initialize-ModulePaths -ModuleRoot $PSScriptRoot
+    $script:OutputReports = $paths.OutputReports
 
     # Write-Log and Write-ProgressEx now come from Logger.psm1 and
     # Progress.psm1 (imported above). The old local Get-HumanReadableSize
@@ -36,17 +40,7 @@ function Invoke-Reports {
     Write-Log "Starting Report Generation" "Info"
 
     # ----- Helper: Read CSV safely -----
-    function Read-CsvSafely {
-        param([string]$Path)
-        if (Test-Path $Path) {
-            try {
-                return Import-Csv -Path $Path
-            } catch {
-                return $null
-            }
-        }
-        return $null
-    }
+    # Read-CsvSafely now comes from Utils.psm1 (imported above).
 
     Write-ProgressEx -Activity "Report Generation" -Status "Loading data..." -PercentComplete 10
 

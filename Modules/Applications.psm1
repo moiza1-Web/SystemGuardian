@@ -5,6 +5,7 @@
 Import-Module (Join-Path $PSScriptRoot "Logger.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "Formatter.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "Progress.psm1") -Force
+Import-Module (Join-Path $PSScriptRoot "Utils.psm1") -Force
 
 function Invoke-Applications {
     <#
@@ -15,13 +16,10 @@ function Invoke-Applications {
     #>
 
     # ----- Path Setup -----
-    $script:ModuleDir = $PSScriptRoot
-    $script:ProjectRoot = Split-Path -Parent $script:ModuleDir
-    $script:OutputCSV = Join-Path $script:ProjectRoot "Output\CSV"
-
-    if (-not (Test-Path $script:OutputCSV)) {
-        New-Item -Path $script:OutputCSV -ItemType Directory -Force | Out-Null
-    }
+    $paths = Initialize-ModulePaths -ModuleRoot $PSScriptRoot
+    $script:ModuleDir = $paths.ModuleDir
+    $script:ProjectRoot = $paths.ProjectRoot
+    $script:OutputCSV = $paths.OutputCSV
 
     # Write-Log, Get-HumanReadableSize, and Write-ProgressEx now come from
     # Logger.psm1, Formatter.psm1, and Progress.psm1 (imported above).

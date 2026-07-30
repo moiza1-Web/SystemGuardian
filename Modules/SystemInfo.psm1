@@ -6,6 +6,7 @@
 # another module already imported an older instance in this session.
 Import-Module (Join-Path $PSScriptRoot "Logger.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "Progress.psm1") -Force
+Import-Module (Join-Path $PSScriptRoot "Utils.psm1") -Force
 
 function Invoke-SystemInfo {
     <#
@@ -14,13 +15,10 @@ function Invoke-SystemInfo {
     #>
 
     # ----- Robust Path Setup -----
-    $script:ModuleDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-    $script:ProjectRoot = Split-Path -Parent $script:ModuleDir
-    $script:OutputCSV = Join-Path $script:ProjectRoot "Output\CSV"
-
-    if (-not (Test-Path $script:OutputCSV)) {
-        New-Item -Path $script:OutputCSV -ItemType Directory -Force | Out-Null
-    }
+    $paths = Initialize-ModulePaths -ModuleRoot $(if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path })
+    $script:ModuleDir = $paths.ModuleDir
+    $script:ProjectRoot = $paths.ProjectRoot
+    $script:OutputCSV = $paths.OutputCSV
 
     # Write-Log and Write-ProgressEx now come from Logger.psm1 and
     # Progress.psm1 (imported above) instead of being redefined locally here.

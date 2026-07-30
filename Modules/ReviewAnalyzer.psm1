@@ -4,6 +4,7 @@
 
 Import-Module (Join-Path $PSScriptRoot "Logger.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "Progress.psm1") -Force
+Import-Module (Join-Path $PSScriptRoot "Utils.psm1") -Force
 
 function Invoke-ReviewAnalyzer {
     <#
@@ -15,17 +16,11 @@ function Invoke-ReviewAnalyzer {
     #>
 
     # ----- Path Setup -----
-    $script:ModuleDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-    $script:ProjectRoot = Split-Path -Parent $script:ModuleDir
-    $script:OutputCSV = Join-Path $script:ProjectRoot "Output\CSV"
-    $script:OutputReports = Join-Path $script:ProjectRoot "Output\Reports"
-
-    if (-not (Test-Path $script:OutputCSV)) {
-        New-Item -Path $script:OutputCSV -ItemType Directory -Force | Out-Null
-    }
-    if (-not (Test-Path $script:OutputReports)) {
-        New-Item -Path $script:OutputReports -ItemType Directory -Force | Out-Null
-    }
+    $paths = Initialize-ModulePaths -ModuleRoot $(if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path })
+    $script:ModuleDir = $paths.ModuleDir
+    $script:ProjectRoot = $paths.ProjectRoot
+    $script:OutputCSV = $paths.OutputCSV
+    $script:OutputReports = $paths.OutputReports
 
     # Write-Log and Write-ProgressEx now come from Logger.psm1 and
     # Progress.psm1 (imported above). The old local Get-HumanReadableSize

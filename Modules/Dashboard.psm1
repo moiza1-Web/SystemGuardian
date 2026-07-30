@@ -4,6 +4,7 @@
 
 Import-Module (Join-Path $PSScriptRoot "Logger.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "Progress.psm1") -Force
+Import-Module (Join-Path $PSScriptRoot "Utils.psm1") -Force
 
 function Invoke-Dashboard {
     <#
@@ -14,28 +15,21 @@ function Invoke-Dashboard {
     $script:ModuleDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
     $script:ProjectRoot = Split-Path -Parent $script:ModuleDir
     $script:OutputCSV = Join-Path $script:ProjectRoot "Output\CSV"
-    $script:OutputHTML = Join-Path $script:ProjectRoot "Output\HTML"
 
     if (-not (Test-Path $script:OutputCSV)) {
         Write-Warning "No CSV data found. Run Storage and other modules first."
         return $false
     }
-    if (-not (Test-Path $script:OutputHTML)) {
-        New-Item -Path $script:OutputHTML -ItemType Directory -Force | Out-Null
-    }
+
+    $paths = Initialize-ModulePaths -ModuleRoot $script:ModuleDir
+    $script:OutputHTML = $paths.OutputHTML
 
     # Write-Log and Write-ProgressEx now come from Logger.psm1 and
     # Progress.psm1 (imported above).
 
     Write-Log "Starting Dashboard Generation" "Info"
 
-    function Read-CsvSafely {
-        param([string]$Path)
-        if (Test-Path $Path) {
-            try { return Import-Csv -Path $Path } catch { return $null }
-        }
-        return $null
-    }
+    # Read-CsvSafely now comes from Utils.psm1 (imported above).
 
     Write-ProgressEx -Activity "Dashboard" -Status "Loading data..." -PercentComplete 10
 
