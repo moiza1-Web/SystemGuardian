@@ -78,10 +78,32 @@ Completed work:
 - [x] Professional documentation (Project Charter, Release Plan, Architecture, Coding Standards, Testing Plan)
 - [x] Error handling pass across all modules
 - [x] Config validation (all thresholds read from `config.json` via `Config.psm1`)
-- [ ] Installer / setup script *(deferred to v1.1)*
-- [ ] Versioned GitHub release tag
+- [x] Versioned GitHub release tag
 
 System Guardian is reliable and ready for regular personal use.
+
+---
+
+## Previous Milestone (Delivered)
+
+### v1.1 — Core Architecture Cleanup & Security Hardening
+
+**Status: Complete.**
+
+- [x] All 8 feature modules wired to the 5 shared Core modules (`Logger`, `Formatter`, `Progress`, `Config`, `Utils`), removing duplicated logging/formatting/config/CSV-reading code
+- [x] Fixed a cross-module scope bug in `Utils.psm1`'s `Initialize-ModulePaths`
+- [x] Fixed UTF-8 BOM encoding issue causing emoji corruption in HTML output
+- [x] Removed personal data (a scan-result PDF with real local paths) from the repository and its git history
+- [x] Re-aligned the `v1.0.0` release tag to the cleaned history
+
+---
+
+## Current Milestone
+
+### v1.2 — Installer & Setup
+
+- [ ] Installer / setup script
+- [ ] Versioned GitHub release tag for v1.2
 
 ---
 
