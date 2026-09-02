@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-09-02
+
+### Added
+- **`Setup.ps1` Installer & Environment Verification**:
+  - One-time setup script verifying system prerequisites (PowerShell 5.1+, Windows 10/11).
+  - Automatically creates required output folders (`Output\CSV`, `Output\HTML`, `Output\Reports`, `Logs`).
+  - Validates `Config\config.json` syntax and confirms presence of all 5 Core shared modules.
+  - Interactive/Silent options (`-NoShortcut`, `-Silent`) and optional creation of Desktop shortcut (`System Guardian.lnk`).
+
+## [1.1.0] - 2026-08-01
+
+### Added
+- **Core Shared Modules Fully Wired**: All 8 feature modules (`Storage`, `Duplicates`, `SystemInfo`, `Applications`, `Browser`, `ReviewAnalyzer`, `Reports`, `Dashboard`) now use the 5 shared Core modules (`Logger.psm1`, `Formatter.psm1`, `Progress.psm1`, `Config.psm1`, `Utils.psm1`) instead of duplicating logging, formatting, progress, config, and CSV logic locally.
+- **`Initialize-ModulePaths` (Utils.psm1)**: Standardized path setup (`ModuleDir`, `ProjectRoot`, `OutputCSV`, `OutputReports`, `OutputHTML`, `ConfigPath`) across all modules.
+- **`Read-CsvSafely` (Utils.psm1)**: Shared safe CSV-reading helper used by `Reports.psm1` and `Dashboard.psm1`.
+
+### Fixed
+- **Cross-Module Scope Bug**: `Initialize-ModulePaths` fixed to return a hashtable of paths so caller modules populate their own `$script:` scope reliably.
+- **UTF-8 BOM Encoding**: Re-saved module source files with UTF-8 BOM encoding to fix emoji/special character display in HTML dashboards.
+- **`Reports.psm1` / `Dashboard.psm1` Early-Exit**: Preserved directory safety checks before output folder initialization.
+
+### Security & Data Privacy
+- **Personal Data Removal**: Thoroughly sanitized git history and repository tracking to ensure no local system file paths, personal usernames, or scan result files are tracked or exposed.
+- **Release Tag Realignment**: Aligned `v1.0.0` release tag to sanitized commit history.
+
 ## [1.0.0] - 2026-07-24
 
 ### Added

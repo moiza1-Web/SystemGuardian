@@ -102,8 +102,10 @@ System Guardian is reliable and ready for regular personal use.
 
 ### v1.2 — Installer & Setup
 
-- [ ] Installer / setup script
-- [ ] Versioned GitHub release tag for v1.2
+**Status: Complete.**
+
+- [x] Installer / setup script (`Setup.ps1`)
+- [x] Versioned GitHub release tag for v1.2
 
 ---
 
